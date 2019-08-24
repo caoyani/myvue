@@ -34,6 +34,17 @@
         "hint1": "Please Input Username",        
         "hint2": "Please Input Password",
         "hint3": "Username length is between 1 to 15",
-        "hint4": "logged successfully"
+        "logSucc": "logged successfully",
+        "loginError": "Incorrect username or password"
+    },
+    "home": {
+        "exit": "Exit",
+        "submit": "Submit",
+        "ifExit": "Are you sure to exit?",
+        "warning": "Warning",
+        "ok": "OK",
+        "cancel": "Cancel",
+        "exitCompleted": "Exit completed",
+        "exitCanceled": "Exit canceled"
     }
 }

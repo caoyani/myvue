@@ -33,6 +33,18 @@
         "reset": "重置",
         "hint1": "请输入账号",        
         "hint2": "请输入密码",
-        "hint3": "长度在 1 到 15 个字符"
+        "hint3": "长度在 1 到 15 个字符",
+        "logSucc": "登录成功",
+        "loginError": "账号或密码错误"
+    },
+    "home": {
+        "exit": "退出",
+        "submit": "提交",
+        "ifExit": "确定退出？",
+        "warning": "警告",
+        "ok": "确定",
+        "cancel": "取消",
+        "exitCompleted": "成功退出",
+        "exitCanceled": "取消退出"
     }
 }

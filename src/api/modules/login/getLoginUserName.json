@@ -1,0 +1,10 @@
+{
+  "code": 200,
+  "data": {
+    "result": true,
+    "token": "1234567",
+    "name": "Nicole Cao"
+  },
+  "msg": "success"
+}
+

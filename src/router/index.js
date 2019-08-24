@@ -13,22 +13,17 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: home,
-    },
-    {
-      path: '/login',
       name: 'login',
       component: login,
     },
-    // {
-    //   path: '/',
-    //   name: 'home',
-    //   component: home,
-    //   meta: {
-    //     requiresAuth: true
-    //   }
-    // },
+    {
+      path: '/home',
+      name: 'home',
+      component: home,
+      meta: {
+        requiresAuth: true
+      }
+    },
 
   ]
 })
@@ -43,7 +38,7 @@ router.beforeEach((to, from, next) => {
       next();
     } else {
       next({
-        path: '/login',
+        path: '/',
         query: { redirect: to.fullPath } // 将刚刚要去的路由path（却无权限）作为参数，方便登录成功后直接跳转到该路由
       });
     }

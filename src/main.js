@@ -8,6 +8,12 @@ import 'element-ui/lib/theme-chalk/index.css'
 import VueI18n from 'vue-i18n'  // 引入i18n国际化插件
 
 Vue.config.productionTip = false
+
+const mock = true;
+if (mock) {
+  require('./mocks')
+}
+
 //开启debug模式
 Vue.config.debug = true;
 
