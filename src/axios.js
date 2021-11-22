@@ -1,4 +1,5 @@
 import axios from 'axios'
+const baseConfig = require('./api/config.js')
 
 
 axios.defaults.headers.post['Content-Type'] = 'application/json'
@@ -59,7 +60,8 @@ export function fetch(url, params) {
 
 export default {
 	ldapAuth(data) {
-		return instance.post('http://localhost:8000/ldapAuth', data)
+		// return instance.post('http://localhost:8000/ldapAuth', data)
+		return instance.post(baseConfig.baseURL + ':' + baseConfig.basePort + '/ldapAuth', data)
 	},
 	// // 用户注册
 	// userRegister(data) {
@@ -77,9 +79,20 @@ export default {
 	// delUser(data) {
 	// 	return instance.post('/api/delUser', data)
 	// },
+
 	mockData(params) {
 		console.info("22222222222"+ JSON.stringify(params))
 		return fetch('/api/login', params)
-	}
+	},
+
+	automation_delete(data) {
+		return instance.post(baseConfig.baseURL + ':' + baseConfig.basePort + '/automation_server', data)
+	},
+	automation_axios(data) {
+		console.info("22222222222"+ JSON.stringify(data))
+
+		return fetch('/api/login', data)
+	},
+
 
 }

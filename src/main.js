@@ -5,10 +5,12 @@ import store from '@/store'
 import VueResource from 'vue-resource'
 import ElementUI  from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-import VueI18n from 'vue-i18n'  // 引入i18n国际化插件
+// import VueI18n from 'vue-i18n'  // 引入i18n国际化插件
+import i18n from '@/i18n/i18n'
 
 Vue.config.productionTip = false
 
+//使用mock挡板，引入mockjs
 const mock = true;
 if (mock) {
   require('./mocks')
@@ -19,16 +21,16 @@ Vue.config.debug = true;
 
 Vue.use(VueResource)
 Vue.use(ElementUI)
-Vue.use(VueI18n) 
+// Vue.use(VueI18n) 
 
 // 注册i18n实例并引入语言文件，文件格式等下解析
-const i18n = new VueI18n({  
-  locale: 'en',  
-  messages: {    
-    'zh': require('@/assets/languages/zh.json'),    
-    'en': require('@/assets/languages/en.json')  
-  }
-})
+// const i18n = new VueI18n({  
+//   locale: 'en',  
+//   messages: {    
+//     'zh': require('@/assets/languages/zh.json'),    
+//     'en': require('@/assets/languages/en.json')  
+//   }
+// })
 
 // 现在我们可以启动应用了！
 // 路由器会创建一个 App 实例，并且挂载到选择符 #app 匹配的元素上。

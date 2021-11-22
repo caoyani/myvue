@@ -16,7 +16,7 @@
               <el-input v-model="ruleForm.name"></el-input>
             </el-form-item>
             <el-form-item :label="$t('login.password')" prop="pass">
-              <el-input type="password" v-model="ruleForm.pass" auto-complete="off"></el-input>
+              <el-input type="password" v-model="ruleForm.pass" auto-complete="off" @keyup.enter.native="submitForm('ruleForm')"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="submitForm('ruleForm')">{{$t("login.login")}}</el-button>
@@ -72,8 +72,10 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
+          // axios.ldapAuth(this.ruleForm).then(({ data }) => {
           axios.mockData(this.ruleForm).then(({ data }) => {
-            console.info("111111111---" + data);
+
+            console.info("111111111---" + JSON.stringify(data));
             //账号不存在
             if (data.result === false) {
               this.$message({
@@ -94,7 +96,7 @@ export default {
 
               this.$emit("profile", username);
               //跳到目标页
-              this.$router.push("home");
+              this.$router.push("createcomp");
             }
           });
         } else {

@@ -3,11 +3,13 @@ import Router from 'vue-router'
 import store from '@/store/index'
 import login from '@/components/login'
 import home from '@/components/home'
+import createcomp from '@/components/createcomp'
+import deletecomp from '@/components/deletecomp'
+import more from '@/components/more'
 
 Vue.use(Router)
 
-// 创建一个路由器实例
-// 并且配置路由规则
+// 创建一个路由器实例，并且配置路由规则
 const router = new Router({
   mode: 'history',
   routes: [
@@ -17,12 +19,24 @@ const router = new Router({
       component: login,
     },
     {
+      path: '/login',
+      name: 'login',
+      component: login,
+    },
+    {
       path: '/home',
       name: 'home',
       component: home,
       meta: {
         requiresAuth: true
-      }
+      },
+      children: [
+        {name: 'createcomp', path: '/createcomp', component: createcomp},
+        {name: 'deletecomp', path: '/deletecomp', component: deletecomp},
+        {name: 'more', path: '/more', component: more},
+
+        
+      ]
     },
 
   ]

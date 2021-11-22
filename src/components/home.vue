@@ -1,45 +1,74 @@
 <template>
-  <div id="home">
-    <el-container>
-      <el-header style="text-align: right; font-size: 12px">
+  <div id="homepage">
+    <el-container style="height: auto; width: auto; border: 1px; solid #eee">
+      <el-header id="homeheader">
         <img style="width: 130px; height: 60px; float: left;" src="../assets/logo.png">
-        <span>Welcome to the system!</span>
+        <span style="margin-left: 10px; float: left">{{$t("common.header")}}</span>
         <div style="margin-right: 5px; float: right;">
-          <el-link type="primary" :underline="false" icon="el-icon-s-tools" style="margin-right: 10px; color: #E5E6DB;" @click="logout">&thinsp;{{$t("home.exit")}}</el-link>
-          <el-link :underline="false" icon="el-icon-user-solid" style="margin-right: 1px; color: #E5E6DB;">&thinsp;{{profile}}</el-link>
-          <el-dropdown>
-            <i class="el-icon-setting" style="margin-right: 15px"></i>
+          <el-link type="primary" 
+          :underline="false" 
+          icon="el-icon-user-solid" 
+          style="margin-right: 10px; color: #E5E6DB;" 
+          >&thinsp;{{profile}}</el-link>
+
+          <el-link type="primary" 
+          :underline="false" 
+          icon="el-icon-switch-button" 
+          style="margin-right: 10px; color: #E5E6DB;" 
+          @click="logout"
+          >&thinsp;{{$t("home.exit")}}</el-link>
+
+          <el-link 
+          :underline="false" 
+          icon="el-icon-user-solid" style="margin-right: 1px; color: #E5E6DB;">&thinsp;{{profile}}
+          </el-link>
+
+          <el-dropdown trigger="click" @command="handleCommand">
+            <i class="el-icon-s-tools" style="color: #E5E6DB">
+              <span class="el-dropdown-link" style="color: #E5E6DB">{{$t("common.lang")}}<i class="el-icon-arrow-down el-icon-right"></span>
+            </i>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>查看</el-dropdown-item>
-              <el-dropdown-item>退出</el-dropdown-item>
+              <el-dropdown-item commond = "en">English</el-dropdown-item>
+              <el-dropdown-item commond = "cn">中文</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
+
         </div>
       </el-header>
-  
-      <el-main>
-        <el-form ref="form" :model="form">
-          <el-row style="line-height: 12px; margin-top: -12px;">
-            <p>
-              Please fill out the form below to automatically configure and generate the necessary tools for your dashboard
-            </p>
-            <p>
-              <i><small>This is currently a prototype system.</small></i>
-            </p>            
-            <el-col :span="24"><div class="grid-content bg-purple-dark"></div></el-col>
-          </el-row>
 
-          <el-row>
-            <el-col :span="12"><div class="grid-content bg-purple">surname</div></el-col>
-            <el-col :span="12"><div class="grid-content bg-purple-light"><el-input placeholder="Nicole" v-model="form.surname" size="large" value="Nicole Cao"></el-input></div></el-col>
-          </el-row>
+      <el-container style = "width: auto; height: auto; float: left;">
+        <el-aside>
+          <el-scrollbar style="height: 100%">
+            <!-- :default-active="this.$router.path" -->
+            <el-menu :default-openeds="['1']" :default-active="activerrouter" router 
+            background-color="#545c64"
+            text-color="#fff" active-text-color="#ffd04b">
+              <el-menu-item index="/createcomp"><i class="el-icon-s-home"></i>{{$t("aside.createcomp")}}</el-menu-item>
+              <el-menu-item index="/deletecomp"><i class="el-icon-scissors"></i>{{$t("aside.deletecomp")}}</el-menu-item>
+              <el-menu-item index="/more"><i class="el-icon-loading"></i>{{$t("aside.more")}}</el-menu-item>
+            </el-menu>
+          </el-scrollbar>
+        </el-aside>
 
-        </el-form>
-      </el-main>
+        <el-container>
+          <el-header style="height: 30px; line-height: 0px">
+            <p><i><small>{{$t("common.reminder")}}</small></i></p>
+          </el-header>
 
-      <el-footer height="60px">
-        <el-button class="footer-button" type="primary" @click="submitForm('form')" round>{{$t("home.submit")}}</el-button>
-      </el-footer>
+          <el-main>
+            <el-scrollbar style="height: 100%">
+              <router-view/>
+            </el-scrollbar>
+          </el-main>
+
+          <el-footer id="sub-footer" style="height:20px; font-sytle: italic; font-size:x-small;">{{$t("common.footer")}}</el-footer>
+        
+        </el-container>
+
+      </el-container>
+
+      <!-- <el-footer id="sub-footer" style="height:20px; font-sytle: italic; font-size:x-small;">{{$t("common.footer")}}</el-footer> -->
+
     </el-container>
   </div>
 </template>
@@ -50,20 +79,23 @@ import axios from "@/axios.js"
 export default {
   data() {
     return {
-      form: {
-        surname: ''
-      },
       profile: this.$store.state.username,
-    }
+      staffid: this.$store.state.sid,
+      email: this.$store.state.email,
+      activerouter: '',
+      lang: 'en',
+    };
   },
   mounted: function() {
-  
+    //get地址栏的路由，设置导航栏的选中状态
+    this.activerouter = window.location.pathname;
+    this.$i18n.locale = localStorage.lang;
   },
   methods: {
     logout() {
       this.$confirm(this.$t('home.ifExit'), this.$t('home.warning'), {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+        confirmButtonText: this.$t('home.ok'),
+        cancelButtonText: this.$t('home.cancel'),
         type: 'warning'
       }).then(() => {
         this.$store.dispatch('UserLogout');
@@ -82,22 +114,23 @@ export default {
       });   
     },
 
-    //submit form
-    submitForm(formName) {
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          axios.userLogin(this.form)
-          .then(({ data }) => {
-            console.info("aaaaaaaaaaaaa" + JSON.stringify(this.form));
-            //....
-          });
-        } else {
-          console.log("error submit!");
-          return false;
+    handleCommon(command) {
+      switch(command) {
+        case "cn": {
+          this.lang = "cn";
+          this.$i18n.locale = this.lang;
+          localStorage.lang = this.lang;
+          break;
         }
-      })
+        case "en": {
+          this.lang = "en";
+          this.$i18n.locale = this.lang;
+          localStorage.lang = this.lang;
+          break;
+        }
+        default: break;
+      }
     },
-
 
   }
 
@@ -106,84 +139,104 @@ export default {
  
 <style>
 
-  .el-header {
-    background-color: #213A54;
-    color: #E5E6DB;
-    /* text-align: center; */
-    line-height: 60px;
-    vertical-align: middle;
-  }
-  
- .el-footer {
-    background-color: #F4F9FE;
-    color: #E5E6DB;
-    text-align: center;
-    height: 80px;
-    line-height: 60px;
-    margin-left: 20px;
-    margin-right: 10px;
-    margin-bottom: 10px;
-  }
-
-  .el-main {
-    background-color: #E9EEF3;
-    color: #333;
-    text-align: left;
-    line-height: 45px;
-    margin-left: 20px;
-    margin-right: 10px;
-    margin-bottom: 1px;
-    font-size: 14px;
-  }
-  
- .el-container {
-   margin-bottom: 20px;
-   background-color: rgb(123, 144, 161);
-   margin-top: 10px;
-   height: 830px;
-   width: 100%;
-  }
-  
-  .footer-buttom {
-    border: 1px solid #448bd5;
-    background-color: #448bd5;
-    box-shadow: 0 2px 12 px #cac6c6;
-    width: 300px;
-  }
-
-  .el-link {
-    color: #E5E6DB;
-  }
-
-  .el-row {
-    margin-bottom: 1px;
-  }
-
-  .el-col {
-    border-radius: 4px;
-  }
-
-  .bg-purple {
-    background: #d3dce6;
-  }
-
-  .bg-purple-light {
-    background: #e5e9f2;
-  }
-
-  .grid-content {
-    border-radius: 4px;
-    min-height: 30px;
-    padding-left: 12px;
-  }
-
-  .row-bg {
-    padding: 10px 0;
-    background-color: #f9fafc;
-  }
-
-  .el-input {
-    font-size: 14px
-  }
+#homepage {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+}
+#homeheader {
+  background-color: #213A54;
+  color: #E5E6DB;
+  /* text-align: center; */
+  line-height: 60px;
+  vertical-align: middle;
+  font-size: 16px;
+}
+.el-container {
+  line-height: 40px;
+  font-size: 14px;
+  /* min-height: 100%; */
+}
+#sub-footer {
+  background-color: #8493a3;
+  color: #E5E6DB;
+  display: flex;
+  align-items: center;
+}
+.el-aside {
+  background-color: #545c64;
+  height: calc(100vh - 60px);
+}
+.el-scrollbar__wrap {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.el-main {
+  padding: 3px;
+  padding-left: 8px;
+  padding-right: 8px;
+  background-color: aliceblue;
+  height: calc(100vh - 116px);
+}
+.comment {
+  line-height: 12px;
+  text-align: right;
+  margin-top: 16px;
+  color: rgb(0, 0, 200);
+}
+.grid-content {
+  border-radius: 4px;
+  margin-right: 6px;
+  margin-bottom: 1px;
+  margin-top: 20px;
+}
+.el-link {
+  color: #E5E6DB
+}
+.bg-purple {
+  background-color: #d3dce6;
+}
+.bg-purple-light {
+  background-color: #e5e9f2;
+}
+.grid-content-right {
+  padding-left: 6px;
+  padding-right: 12px;
+}
+.box-card-header {
+  text-align: left;
+  line-height: 5px;
+  font-weight: bold;
+}
+.el-card__body {
+  padding-top: 0%;
+}
+.el-form-item__label {
+  padding: 0%;
+  text-align: left;
+  color: black;
+}
+#sbmbutton {
+  text-align: center;
+  line-height: 80px;
+}
+.footer-button {
+  box-shadow: 0 2px 12px 0 #868383;
+  width: 150px;
+}
+.el-select-dropdown__list {
+  margin-bottom: 18px;
+}
+.el-dropdown-link {
+  cursor: pointer;
+  color: #409eff;
+}
+.el-icon-arrow-down {
+  font-size: 12px;
+}
+ 
 
 </style>

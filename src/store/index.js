@@ -6,7 +6,9 @@ Vue.use(Vuex);
 //初始化时用sessionStore.getItem('token'),这样子刷新页面就无需重新登录
 const state = {
     token: window.sessionStorage.getItem('token'),
-    username: ''
+    username: window.sessionStorage.getItem('username'),
+    sid: window.sessionStorage.getItem('sid'),
+    mail: window.sessionStorage.getItem('mail'),
 };
 
 const mutations = {
@@ -24,7 +26,13 @@ const mutations = {
         //把用户名存起来
         state.username = data;
         window.sessionStorage.setItem('username', data);
-    }
+    },
+    MAIL: (state, data) => {
+        //把用户名存起来
+        state.mail = data;
+        window.sessionStorage.setItem('mail', data);
+    },
+
 };
 
 const actions = {
@@ -36,6 +44,9 @@ const actions = {
     },
     UserName({ commit }, data){
         commit('USERNAME', data);
+    },
+    UserName({ commit }, data){
+        commit('MAIL', data);
     }
 };
 
